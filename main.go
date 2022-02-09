@@ -16,8 +16,9 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// TODO: make it simple
 func AutoMigrate(db *gorm.DB) {
-	db.AutoMigrate(models.GetModelStructs()...)
+	db.AutoMigrate(&models.Book{}, &models.Role{}, &models.User{}, &models.RentedBook{}, &models.RentedBookDetail{}, &models.UserDetail{})
 }
 
 const HTML_GLOB = "./public/html/*"

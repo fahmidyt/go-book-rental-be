@@ -1,12 +1,15 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type UserDetail struct {
 	Base
-	User        User   `gorm:"embedded"`
-	firstName   string `gorm:"not null"`
-	lastName    string `gorm:"not null"`
-	phoneNumber string `gorm:"not null"`
-	dateOfBirth time.Time
+	UserID      uint
+	firstName   string    `gorm:"not null"`
+	lastName    string    `gorm:"not null"`
+	phoneNumber string    `gorm:"not null"`
+	dateOfBirth time.Time `gorm:"not null"`
+	User        User
 }

@@ -7,9 +7,9 @@ import (
 type UserDetail struct {
 	Base
 	UserID      uint
-	firstName   string    `gorm:"not null"`
-	lastName    string    `gorm:"not null"`
-	phoneNumber string    `gorm:"not null"`
-	dateOfBirth time.Time `gorm:"not null"`
+	FirstName   string    `gorm:"not null"`
+	LastName    string    `gorm:"not null"`
+	PhoneNumber string    `gorm:"not null"`
+	DateOfBirth time.Time `gorm:"not null"`
 	User        User
 }

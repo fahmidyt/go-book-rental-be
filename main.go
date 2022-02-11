@@ -18,7 +18,7 @@ import (
 
 // TODO: make it simple
 func AutoMigrate(db *gorm.DB) {
-	db.AutoMigrate(&models.Book{}, &models.Role{}, &models.User{}, &models.RentedBook{}, &models.RentedBookDetail{}, &models.UserDetail{})
+	db.AutoMigrate(&models.Book{}, &models.Role{}, &models.User{}, &models.RentedBook{}, &models.RentedBookDetail{}, &models.UserDetail{}, &models.RefreshToken{})
 }
 
 const HTML_GLOB = "./public/html/*"
@@ -43,7 +43,9 @@ func main() {
 	// every endpoint that start with /v1 will use auth middleware
 	v1Group := r.Group("/v1", middlewares.AuthMiddleware())
 
-	db := db.OpenConnection()
+	db.OpenConnection()
+	db := db.GetDB()
+
 	AutoMigrate(db)
 
 	// all of the routes declared here

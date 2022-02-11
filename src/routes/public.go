@@ -3,6 +3,7 @@ package routes
 import (
 	"net/http"
 
+	"github.com/fahmidyt/go-book-rental-be/src/controllers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,6 +21,10 @@ func PublicRoutes(r *gin.Engine) {
 	// public auth routes
 	auth := r.Group("/auth")
 	{
-		auth.POST("/login")
+		// declare auth controller
+		authController := new(controllers.AuthController)
+
+		auth.POST("/login", authController.Login)
+		auth.POST("/register", authController.Register)
 	}
 }

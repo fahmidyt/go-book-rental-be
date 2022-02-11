@@ -2,5 +2,5 @@ package models
 
 type Role struct {
 	Base
-	Name string `gorm:"unique"`
+	Name string `gorm:"unique;size:50"`
 }

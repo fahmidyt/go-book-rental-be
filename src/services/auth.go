@@ -22,6 +22,7 @@ type Token struct {
 
 type TokenDetails struct {
 	Token
+	UserID      uint
 	AccessUUID  string
 	RefreshUUID string
 	AtExpires   int64
@@ -131,6 +132,8 @@ func (srvc AuthService) Register(form types.RegisterForm) (user models.User, err
 func (srvc AuthService) GenerateJWT(userID uint) (*TokenDetails, error) {
 	var err error
 	td := &TokenDetails{}
+
+	td.UserID = userID
 
 	td.AtExpires = time.Now().Add(time.Hour * 12).Unix()
 	td.AccessUUID = uuid.NewString()

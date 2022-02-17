@@ -50,15 +50,15 @@ func getToken(c *gin.Context) (currentToken string, ok bool) {
 	if cookie, err := c.Request.Cookie("token"); err == nil {
 		currentToken = cookie.Value
 	} else {
-		getHeader := c.Request.Header.Get("authorization")
+		getHeader := c.Request.Header.Get("Authorization")
 
 		if len(getHeader) <= 0 {
 			return currentToken, false
 		}
 
-		splitToken := strings.Split(currentToken, " ")
+		splitToken := strings.Split(getHeader, " ")
 
-		if len(getHeader) == 2 && (splitToken[0] == "Bearer" || splitToken[0] == "JWT") {
+		if len(splitToken) == 2 && (splitToken[0] == "Bearer" || splitToken[0] == "JWT") {
 			return splitToken[1], true
 		}
 	}

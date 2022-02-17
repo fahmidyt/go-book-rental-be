@@ -1,6 +1,6 @@
 package types
 
-import "github.com/fahmidyt/go-book-rental-be/src/helpers"
+import "github.com/fahmidyt/go-book-rental-be/src/datatypes"
 
 type LoginForm struct {
 	Email    string `form:"email" json:"email" binding:"required,email"`
@@ -9,9 +9,9 @@ type LoginForm struct {
 
 type RegisterForm struct {
 	LoginForm
-	ConfirmPassword string       `form:"confirmPassword" json:"confirmPassword" binding:"required,eqfield=Password"`
-	FirstName       string       `form:"firstName" json:"firstName" binding:"required,min=3,max=50,min=3,max=50"`
-	LastName        string       `form:"lastName" json:"lastName" binding:"required,min=3,max=50"`
-	PhoneNumber     string       `form:"phoneNumber" json:"phoneNumber" binding:"required,min=10,max=15"`
-	DateOfBirth     helpers.Time `form:"dateOfBirth" json:"dateOfBirth" binding:"required"`
+	ConfirmPassword string         `form:"confirmPassword" json:"confirmPassword" binding:"required,eqfield=Password"`
+	FirstName       string         `form:"firstName" json:"firstName" binding:"required,min=3,max=50,min=3,max=50"`
+	LastName        string         `form:"lastName" json:"lastName" binding:"required,min=3,max=50"`
+	PhoneNumber     string         `form:"phoneNumber" json:"phoneNumber" binding:"required,min=10,max=15"`
+	DateOfBirth     datatypes.Time `form:"dateOfBirth" json:"dateOfBirth" binding:"required"`
 }

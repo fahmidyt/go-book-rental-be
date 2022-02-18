@@ -43,6 +43,11 @@ func VerifyAccesToken(c *gin.Context) {
 		return
 	}
 
+	jwtClaim, _ := jwtToken.Claims.(jwt.MapClaims)
+	userData := jwtClaim["user"].(map[string]interface{})
+
+	c.Set("User", userData)
+
 	c.Next()
 }
 

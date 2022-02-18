@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/fahmidyt/go-book-rental-be/src/services"
 	"github.com/fahmidyt/go-book-rental-be/src/types"
@@ -32,6 +33,9 @@ func (ctrl AuthController) Login(c *gin.Context) {
 		})
 		return
 	}
+
+	maxAge := time.Now().Add(time.Hour * 12 * 7).Unix()
+	c.SetCookie("token", token.AccessToken, int(maxAge), "/v1", "localhost", true, true)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Successfully login!",

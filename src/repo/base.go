@@ -2,25 +2,28 @@ package repo
 
 import (
 	"errors"
+	"reflect"
 
 	"github.com/fahmidyt/go-book-rental-be/src/db"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
-// TODO: reflect interface{} and make it slice
 type BaseRepo struct {
 	Model interface{}
 }
 
-func (repo BaseRepo) GetAll() ([]map[string]interface{}, error) {
-	mockModel := []map[string]interface{}{}
-	res := db.GetDB().Model(&repo.Model).Find(&mockModel)
+func (repo BaseRepo) GetAll() (interface{}, error) {
+	dType := reflect.TypeOf(repo.Model)
+	makeSlice := reflect.New(reflect.SliceOf(dType)).Interface()
+
+	res := db.GetDB().Model(&repo.Model).Preload(clause.Associations).Find(makeSlice)
 
 	if !errors.Is(res.Error, gorm.ErrRecordNotFound) {
-		return mockModel, res.Error
+		return makeSlice, res.Error
 	}
 
-	return mockModel, nil
+	return makeSlice, nil
 }
 
 func (repo BaseRepo) GetOne(id uint) (interface{}, error) {

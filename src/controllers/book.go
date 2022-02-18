@@ -10,7 +10,7 @@ import (
 type BookController struct {
 }
 
-var bookService = services.InitService()
+var bookService = services.InitBookService()
 
 func (ctrl BookController) GetAll(c *gin.Context) {
 	data, err := bookService.GetAll()

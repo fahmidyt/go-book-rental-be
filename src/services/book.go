@@ -9,11 +9,11 @@ type BookService struct {
 	repo.BaseRepo
 }
 
-var serviceModel = new(models.Book)
+var bookModel = new(models.Book)
 
-func InitService() *BookService {
+func InitBookService() *BookService {
 	p := new(BookService)
-	p.Model = serviceModel
+	p.Model = bookModel
 
 	return p
 }

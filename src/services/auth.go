@@ -27,6 +27,7 @@ type TokenDetails struct {
 	RefreshUUID string
 	AtExpires   int64
 	RtExpires   int64
+	User        models.User
 }
 
 type AuthService struct{}
@@ -63,7 +64,7 @@ func (srvc AuthService) Login(form types.LoginForm) (user models.User, token Tok
 	}
 
 	//Generate the JWT auth token
-	tokenDetails, err := srvc.GenerateJWT(user.ID)
+	tokenDetails, err := srvc.GenerateJWT(user)
 	if err != nil {
 		return user, token, err
 	}
@@ -129,11 +130,12 @@ func (srvc AuthService) Register(form types.RegisterForm) (user models.User, err
 	return user, err
 }
 
-func (srvc AuthService) GenerateJWT(userID uint) (*TokenDetails, error) {
+func (srvc AuthService) GenerateJWT(user models.User) (*TokenDetails, error) {
 	var err error
 	td := &TokenDetails{}
 
-	td.UserID = userID
+	td.UserID = user.ID
+	td.User = user
 
 	td.AtExpires = time.Now().Add(time.Hour * 12).Unix()
 	td.AccessUUID = uuid.NewString()
@@ -144,8 +146,9 @@ func (srvc AuthService) GenerateJWT(userID uint) (*TokenDetails, error) {
 	atClaims := jwt.MapClaims{}
 	atClaims["authorized"] = true
 	atClaims["access_uuid"] = td.AccessUUID
-	atClaims["user_id"] = userID
+	atClaims["user_id"] = user.ID
 	atClaims["exp"] = td.AtExpires
+	atClaims["user"] = td.User
 
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
 	td.AccessToken, err = at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
@@ -158,7 +161,7 @@ func (srvc AuthService) GenerateJWT(userID uint) (*TokenDetails, error) {
 	//Creating Refresh Token
 	rtClaims := jwt.MapClaims{}
 	rtClaims["refresh_uuid"] = td.RefreshUUID
-	rtClaims["user_id"] = userID
+	rtClaims["user_id"] = user.ID
 	rtClaims["exp"] = td.RtExpires
 	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, rtClaims)
 	td.RefreshToken, err = rt.SignedString([]byte(os.Getenv("REFRESH_SECRET")))

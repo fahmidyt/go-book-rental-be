@@ -27,13 +27,18 @@ func (repo BaseRepo) GetAll() (interface{}, error) {
 }
 
 func (repo BaseRepo) GetOne(id uint) (interface{}, error) {
-	res := db.GetDB().First(&repo.Model)
+	res := db.GetDB().First(&repo.Model, "id = ?", id)
 
-	if res.Error != nil {
-		return &repo.Model, res.Error
+	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
+		var emptyInterface interface{}
+		return emptyInterface, nil
 	}
 
-	return &repo.Model, res.Error
+	if res.Error != nil {
+		return repo.Model, res.Error
+	}
+
+	return repo.Model, res.Error
 }
 
 func (repo BaseRepo) Create(payload interface{}) (data interface{}, err error) {

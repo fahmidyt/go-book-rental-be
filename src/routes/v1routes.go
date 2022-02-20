@@ -11,6 +11,7 @@ var userController = new(controllers.UserController)
 
 func V1Routes(r *gin.RouterGroup) {
 	r.GET("/book", bookController.GetAll)
+	r.GET("/book/:id", bookController.GetOne)
 
 	adminRoute := r.Group("/admin")
 	{
